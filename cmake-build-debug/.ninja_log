@@ -1,0 +1,13 @@
+# ninja log v6
+6	192	7556973189611312	CMakeFiles/PEL_AG4.dir/main.cpp.obj.ddi	a77648256bd416fa
+192	226	7556973191784044	CMakeFiles/PEL_AG4.dir/CXX.dd	af452d9e7a5f9f01
+192	226	7556973191784044	R:/Repositorios/Proyecto PEL 4/PEL-AG4/cmake-build-debug/CMakeFiles/PEL_AG4.dir/CXXModules.json	af452d9e7a5f9f01
+192	226	7556973191784044	CMakeFiles/PEL_AG4.dir/main.cpp.obj.modmap	af452d9e7a5f9f01
+231	1116	7556973191862653	CMakeFiles/PEL_AG4.dir/main.cpp.obj	df1cfbb0a8e4e015
+1118	1272	7556973200730046	PEL_AG4.exe	760359b84dd4f40e
+19	175	7556976359033699	CMakeFiles/PEL_AG4.dir/main.cpp.obj.ddi	a77648256bd416fa
+175	204	7556976360598143	CMakeFiles/PEL_AG4.dir/CXX.dd	af452d9e7a5f9f01
+175	204	7556976360598143	R:/Repositorios/Proyecto PEL 4/PEL-AG4/cmake-build-debug/CMakeFiles/PEL_AG4.dir/CXXModules.json	af452d9e7a5f9f01
+175	204	7556976360598143	CMakeFiles/PEL_AG4.dir/main.cpp.obj.modmap	af452d9e7a5f9f01
+206	966	7556976360898850	CMakeFiles/PEL_AG4.dir/main.cpp.obj	df1cfbb0a8e4e015
+967	1056	7556976368514153	PEL_AG4.exe	760359b84dd4f40e

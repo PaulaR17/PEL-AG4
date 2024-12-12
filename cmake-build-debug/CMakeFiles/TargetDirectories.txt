@@ -1,0 +1,3 @@
+R:/Repositorios/Proyecto PEL 4/PEL-AG4/cmake-build-debug/CMakeFiles/PEL_AG4.dir
+R:/Repositorios/Proyecto PEL 4/PEL-AG4/cmake-build-debug/CMakeFiles/edit_cache.dir
+R:/Repositorios/Proyecto PEL 4/PEL-AG4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
