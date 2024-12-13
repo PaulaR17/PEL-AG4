@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Contact_LinkedList.h"
 #include "ClaseUsuario.h"
+#include <limits> // Para std::numeric_limits
 
 using namespace std;
 
@@ -29,34 +30,28 @@ void inicializarUsuarios(Usuario*& usuario1, Usuario*& usuario2, Usuario*& usuar
 }
 
 Usuario* iniciarSesion(Usuario* usuario1, Usuario* usuario2, Usuario* usuario3) { //todo el tema de inicio de sesion
-    string nombre, apellido1, apellido2, telefono;
+    string nombre, apellido1;
 
     //le preguntamos al usuario sus datos
     cout << "Introduce tu nombre: ";
     cin >> nombre;
     cout << "Introduce tu primer apellido: ";
     cin >> apellido1;
-    cout << "Introduce tu segundo apellido: ";
-    cin >> apellido2;
-    cout << "Introduce tu numero de telefono: ";
-    cin >> telefono;
+
 
     //al ser usuarios predeterminados y solo 3 nos podemos permitir el comprobar 1 por 1
 
-    if (usuario1->getNombre() == nombre && usuario1->getApellido1() == apellido1 &&
-        usuario1->getApellido2() == apellido2 && usuario1->getTelefono() == telefono) {
+    if (usuario1->getNombre() == nombre && usuario1->getApellido1() == apellido1) {
         cout << "Sesion iniciada como " << usuario1->getNombre() << endl;
         return usuario1;
         }
 
-    if (usuario2->getNombre() == nombre && usuario2->getApellido1() == apellido1 &&
-        usuario2->getApellido2() == apellido2 && usuario2->getTelefono() == telefono) {
+    if (usuario2->getNombre() == nombre && usuario2->getApellido1() == apellido1) {
         cout << "Sesion iniciada como " << usuario2->getNombre() << endl;
         return usuario2;
         }
 
-    if (usuario3->getNombre() == nombre && usuario3->getApellido1() == apellido1 &&
-        usuario3->getApellido2() == apellido2 && usuario3->getTelefono() == telefono) {
+    if (usuario3->getNombre() == nombre && usuario3->getApellido1() == apellido1) {
         cout << "Sesion iniciada como " << usuario3->getNombre() << endl;
         return usuario3;
         }
@@ -75,45 +70,97 @@ int main() {
     int opcion;
 
     //todo el menú del programa
-    do {
-        cout << "\n=== Menu de Inicio de Sesion ===\n";
-        cout << "1. Iniciar sesion\n";
-        cout << "2. Cerrar sesion\n";
-        cout << "3. Mostrar contactos del usuario activo\n";
-        cout << "4. Salir\n";
-        cout << "Elige una opcion: ";
-        cin >> opcion;
+   do {
+    cout << "\n=== Menu de Inicio de Sesion ===\n";
+    cout << "1. Iniciar sesion\n";
+    cout << "2. Cerrar sesion\n";
+    cout << "3. Mostrar contactos del usuario activo\n";
+    cout << "4. Agregar Contacto\n";
+    cout << "5. Eliminar contacto\n";
+    cout << "6. Modificar contacto\n";
+    cout << "7. Salir\n";
+    cout << "Elige una opcion: ";
 
-        switch (opcion) {
-            case 1:
-                if (usuarioActivo != nullptr) {
-                    cout << "Ya hay un usuario logueado. Por favor, cierra sesion primero.\n";
-                } else {
-                    usuarioActivo = iniciarSesion(usuario1, usuario2, usuario3);
-                }
+    cin >> opcion;
+
+    // Manejar entradas no válidas
+    if (cin.fail()) {
+        cin.clear(); // Limpia el estado de error de cin
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descarta la entrada incorrecta
+        cout << "Entrada no valida. Por favor, introduce un numero.\n";
+        continue; // Regresa al inicio del bucle
+    }
+
+    switch (opcion) {
+        case 1:
+            if (usuarioActivo != nullptr) {
+                cout << "Ya hay un usuario logueado. Por favor, cierra sesion primero.\n";
+            } else {
+                usuarioActivo = iniciarSesion(usuario1, usuario2, usuario3);
+            }
             break;
-            case 2:
-                if (usuarioActivo == nullptr) {
-                    cout << "No hay ningun usuario logueado.\n";
-                } else {
-                    cout << "Sesion cerrada para " << usuarioActivo->getNombre() << ".\n";
-                    usuarioActivo = nullptr;
-                }
+        case 2:
+            if (usuarioActivo == nullptr) {
+                cout << "No hay ningun usuario logueado.\n";
+            } else {
+                cout << "Sesion cerrada para " << usuarioActivo->getNombre() << ".\n";
+                usuarioActivo = nullptr;
+            }
             break;
-            case 3:
-                if (usuarioActivo == nullptr) {
-                    cout << "No hay ningun usuario logueado. Por favor, inicia sesion primero.\n";
-                } else {
-                    usuarioActivo->imprimirInfo();
-                }
+        case 3:
+            if (usuarioActivo == nullptr) {
+                cout << "No hay ningun usuario logueado. Por favor, inicia sesion primero.\n";
+            } else {
+                cout << "\n=== Contactos del Usuario Activo ===\n";
+                usuarioActivo->mostrarContactosConDuplicados();
+            }
             break;
-            case 4:
-                cout << "Saliendo del programa...\n";
+        case 4:
+            if (usuarioActivo == nullptr) {
+                cout << "No hay ningun usuario logueado. Por favor, inicia sesion primero.\n";
+            } else {
+                string firstName, lastName1, lastName2, phoneNumber, email;
+                cout << "Introduce el nombre: ";
+                cin >> firstName;
+                cout << "Introduce el primer apellido: ";
+                cin >> lastName1;
+                cout << "Introduce el segundo apellido: ";
+                cin >> lastName2;
+                cout << "Introduce el numero de telefono: ";
+                cin >> phoneNumber;
+                cout << "Introduce el email: ";
+                cin >> email;
+                usuarioActivo->agregarContacto(firstName, lastName1, lastName2, phoneNumber, email);
+            }
             break;
-            default:
-                cout << "Opcion no valida. Intenta nuevamente.\n";
-        }
-    } while (opcion != 4);
+        case 5:
+            if (usuarioActivo == nullptr) {
+                cout << "No hay ningun usuario logueado. Por favor, inicia sesion primero.\n";
+            } else {
+                string criterio;
+                cout << "Introduce el nombre o el numero de telefono del contacto a eliminar: ";
+                cin >> criterio;
+                usuarioActivo->eliminarContacto(criterio);
+            }
+            break;
+        case 6:
+            if (usuarioActivo == nullptr) {
+                cout << "No hay ningun usuario logueado. Por favor, inicia sesion primero.\n";
+            } else {
+                string criterio;
+                cout << "Introduce el nombre o el numero de telefono del contacto a buscar: ";
+                cin >> criterio;
+                usuarioActivo->buscarContacto(criterio);
+            }
+            break;
+        case 7:
+            cout << "Saliendo del programa...\n";
+            break;
+        default:
+            cout << "Opcion no valida. Intenta nuevamente.\n";
+            break;
+    }
+} while (opcion != 7);
 
     //liberanis la memoria de los usuarios al salir
     delete usuario1;

@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "C:/Users/Paula/Desktop/Uni/PEL/TEMA4/Grupal/PEL-AG4/main.cpp" "CMakeFiles/PEL_AG4.dir/main.cpp.obj" "gcc" "CMakeFiles/PEL_AG4.dir/main.cpp.obj.d"
+  "C:/Users/mateo/Documents/Clases/PEL/Actividad Colaborativa 4/main.cpp" "CMakeFiles/PEL_AG4.dir/main.cpp.obj" "gcc" "CMakeFiles/PEL_AG4.dir/main.cpp.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

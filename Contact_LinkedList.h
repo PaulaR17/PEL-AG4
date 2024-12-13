@@ -54,6 +54,10 @@ public:
         return size;
     }
 
+    Node* get_first() const {
+        return first;
+    }
+
     void insert_tail(Contact* data) {
         Node* new_node = new Node(data);
         if (is_empty()) {
@@ -154,6 +158,66 @@ public:
             remove_head(deleteData);
         }
     }
+
+    void insert_in_order(Contact* data) {
+        Node* new_node = new Node(data);
+
+        if (is_empty() || first->data->firstName > data->firstName) {
+            // Insertar al inicio si la lista está vacía o si el contacto es menor que el primero.
+            new_node->next = first;
+            first = new_node;
+            if (last == nullptr) {
+                last = new_node;
+            }
+        } else {
+            // Buscar la posición correcta para insertar
+            Node* current = first;
+            while (current->next != nullptr && current->next->data->firstName < data->firstName) {
+                current = current->next;
+            }
+            new_node->next = current->next;
+            current->next = new_node;
+            if (new_node->next == nullptr) {
+                last = new_node; // Actualizar el último nodo si se inserta al final
+            }
+        }
+        size++;
+    }
+
+
+
+    bool remove_by_name(const std::string& firstName, bool deleteData = true) {
+        if (is_empty()) {
+            std::cout << "Lista vacia!" << std::endl;
+            return false;
+        }
+
+        if (first->data->firstName == firstName) {
+            remove_head(deleteData);
+            return true;
+        }
+
+        Node* current = first;
+        while (current->next != nullptr && current->next->data->firstName != firstName) {
+            current = current->next;
+        }
+
+        if (current->next == nullptr) {
+            std::cout << "Contacto no encontrado!" << std::endl;
+            return false;
+        }
+
+        Node* to_delete = current->next;
+        current->next = to_delete->next;
+        if (to_delete == last) {
+            last = current;
+        }
+        if (deleteData) delete to_delete->data;
+        delete to_delete;
+        size--;
+        return true;
+    }
+
 };
 
 #endif

@@ -54,6 +54,104 @@ public:
         contactos.print(); //imprime todos los contactos de la lista enlazada
     }
 
+    void agregarContacto(const string& firstName, const string& lastName1, const string& lastName2, const string& phoneNumber, const string& email) {
+        if (contactos.search_by_phone(phoneNumber) != nullptr) {
+            cout << "Error: Ya existe un contacto con el numero de telefono " << phoneNumber << "." << endl;
+            return;
+        }
+
+        Contact* nuevoContacto = new Contact(firstName, lastName1, lastName2, phoneNumber, email);
+        contactos.insert_in_order(nuevoContacto); // Insertar en orden
+        cout << "Contacto agregado correctamente." << endl;
+    }
+
+    void eliminarContacto(const string& criterio) {
+        if (contactos.is_empty()) {
+            cout << "No hay contactos en la lista para eliminar." << endl;
+            return;
+        }
+
+        // Intentar eliminar por número de teléfono
+        if (contactos.remove_by_phone(criterio)) {
+            cout << "Contacto con el numero " << criterio << " eliminado correctamente." << endl;
+            return;
+        }
+
+        // Intentar eliminar por nombre
+        if (contactos.remove_by_name(criterio)) {
+            cout << "Contacto con el nombre " << criterio << " eliminado correctamente." << endl;
+            return;
+        }
+    }
+
+    void buscarContacto(const string& criterio) {
+        if (contactos.is_empty()) {
+            cout << "No hay contactos en la lista." << endl;
+            return;
+        }
+
+        // Buscar por número de teléfono
+        Node* nodo = contactos.search_by_phone(criterio);
+
+        // Si no se encuentra por número, buscar por nombre
+        if (nodo == nullptr) {
+            Node* current = contactos.get_first();
+            while (current != nullptr) {
+                if (current->data->firstName == criterio) {
+                    nodo = current;
+                    break;
+                }
+                current = current->next;
+            }
+        }
+
+        // Mostrar el resultado
+        if (nodo != nullptr) {
+            cout << "Contacto encontrado:" << endl;
+            nodo->data->print();
+        } else {
+            cout << "No se encontró ningún contacto con el criterio '" << criterio << "'." << endl;
+        }
+    }
+
+    void mostrarContactosConDuplicados() {
+        if (contactos.is_empty()) {
+            cout << "No hay contactos en la lista." << endl;
+            return;
+        }
+
+        Node* current = contactos.get_first();
+
+        cout << "Lista de contactos:" << endl;
+        while (current != nullptr) {
+            current->data->print();
+            current = current->next;
+        }
+
+        // Verificar duplicados manualmente
+        cout << "\nVerificacion de duplicados:" << endl;
+        bool hayDuplicados = false;
+        Node* outer = contactos.get_first();
+
+        while (outer != nullptr) {
+            Node* inner = outer->next;
+            while (inner != nullptr) {
+                if (outer->data->phoneNumber == inner->data->phoneNumber) {
+                    cout << "El numero de telefono " << outer->data->phoneNumber << " está duplicado entre contactos." << endl;
+                    hayDuplicados = true;
+                }
+                inner = inner->next;
+            }
+            outer = outer->next;
+        }
+
+        if (!hayDuplicados) {
+            cout << "No se encontraron duplicados en la lista de contactos." << endl;
+        }
+    }
+
+
+
 };
 
 
