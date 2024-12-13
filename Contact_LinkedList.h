@@ -1,12 +1,8 @@
-//
-// Created by Cochise Cabau on 26/11/2024. Modified 12/12/2024.
-//
+#ifndef CONTACT_LINKEDLIST_H
+#define CONTACT_LINKEDLIST_H
 
 #include <iostream>
 #include <string>
-
-#ifndef CONTACT_LINKEDLIST_H
-#define CONTACT_LINKEDLIST_H
 
 class Contact {
 public:
@@ -20,8 +16,8 @@ public:
         : firstName(firstName), lastName1(lastName1), lastName2(lastName2), phoneNumber(phoneNumber), email(email) {}
 
     void print() const {
-        std::cout << "Name: " << firstName << " " << lastName1 << " " << lastName2
-                  << ", Phone: " << phoneNumber << ", Email: " << email << std::endl;
+        std::cout << "Nombre: " << firstName << " " << lastName1 << " " << lastName2
+                  << ", Telefono: " << phoneNumber << ", Email: " << email << std::endl;
     }
 };
 
@@ -33,7 +29,7 @@ public:
     Node(Contact* data) : data(data), next(nullptr) {}
 
     ~Node() {
-        delete data;
+        // Mejor aqui no liberamos `data` para evitar conflictos si se comparte
     }
 };
 
@@ -47,9 +43,7 @@ public:
     LinkedList() : first(nullptr), last(nullptr), size(0) {}
 
     ~LinkedList() {
-        while (size > 0) {
-            remove_head();
-        }
+        clear(true); //por defecto, libera los contactos
     }
 
     bool is_empty() const {
@@ -82,14 +76,14 @@ public:
         size++;
     }
 
-    bool remove_by_phone(const std::string& phoneNumber) {
+    bool remove_by_phone(const std::string& phoneNumber, bool deleteData = true) {
         if (is_empty()) {
-            std::cout << "List is empty!" << std::endl;
+            std::cout << "Lista vacia!" << std::endl;
             return false;
         }
 
         if (first->data->phoneNumber == phoneNumber) {
-            remove_head();
+            remove_head(deleteData);
             return true;
         }
 
@@ -99,7 +93,7 @@ public:
         }
 
         if (current->next == nullptr) {
-            std::cout << "Contact not found!" << std::endl;
+            std::cout << "Contacto no encontrado!" << std::endl;
             return false;
         }
 
@@ -108,14 +102,15 @@ public:
         if (to_delete == last) {
             last = current;
         }
+        if (deleteData) delete to_delete->data;
         delete to_delete;
         size--;
         return true;
     }
 
-    void remove_head() {
+    void remove_head(bool deleteData = true) {
         if (is_empty()) {
-            std::cout << "List is empty!" << std::endl;
+            std::cout << "Lista vacia!" << std::endl;
             return;
         }
 
@@ -124,6 +119,7 @@ public:
         if (first == nullptr) {
             last = nullptr;
         }
+        if (deleteData) delete to_delete->data;
         delete to_delete;
         size--;
     }
@@ -136,24 +132,13 @@ public:
             }
             current = current->next;
         }
-        std::cout << "Contact with phone number " << phoneNumber << " not found!" << std::endl;
+        std::cout << "No se encontro el numero de telefono:" << phoneNumber << std::endl;
         return nullptr;
-    }
-
-    void modify_contact(const std::string& phoneNumber, Contact* new_data) {
-        Node* target = search_by_phone(phoneNumber);
-        if (target == nullptr) {
-            std::cout << "Contact with phone number " << phoneNumber << " not found!" << std::endl;
-            return;
-        }
-
-        delete target->data;
-        target->data = new_data;
     }
 
     void print() const {
         if (is_empty()) {
-            std::cout << "List is empty!" << std::endl;
+            std::cout << "Lista vacia!" << std::endl;
             return;
         }
 
@@ -161,6 +146,12 @@ public:
         while (current != nullptr) {
             current->data->print();
             current = current->next;
+        }
+    }
+
+    void clear(bool deleteData = true) {
+        while (!is_empty()) {
+            remove_head(deleteData);
         }
     }
 };

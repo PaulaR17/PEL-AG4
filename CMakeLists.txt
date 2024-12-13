@@ -3,4 +3,6 @@ project(PEL_AG4)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(PEL_AG4 main.cpp)
+add_executable(PEL_AG4 main.cpp
+        ClaseUsuario.h
+)
