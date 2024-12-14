@@ -110,7 +110,7 @@ public:
             cout << "Contacto encontrado:" << endl;
             nodo->data->print();
         } else {
-            cout << "No se encontró ningún contacto con el criterio '" << criterio << "'." << endl;
+            cout << "No se encontro ningún contacto con el criterio '" << criterio << "'." << endl;
         }
     }
 
@@ -149,7 +149,83 @@ public:
             cout << "No se encontraron duplicados en la lista de contactos." << endl;
         }
     }
+void transferirContacto(Usuario* usuarios[], int totalUsuarios) {
+    if (contactos.is_empty()) {
+        std::cout << "No tienes contactos en tu lista para transferir." << std::endl;
+        return;
+    }
 
+    // Mostrar contactos disponibles
+    std::cout << "\n=== Tus contactos disponibles para transferir ===" << std::endl;
+    Node* current = contactos.get_first();
+    while (current != nullptr) {
+        current->data->print();
+        current = current->next;
+    }
+
+    // Seleccionar contacto
+    std::string criterio;
+    std::cout << "\nIngresa el nombre o el numero de telefono del contacto que deseas transferir: ";
+    std::cin >> std::ws;
+    std::getline(std::cin, criterio);
+
+    Node* contactoNodo = contactos.search_by_phone(criterio);
+    if (contactoNodo == nullptr) {
+        contactoNodo = contactos.search_by_name(criterio);
+    }
+
+    if (contactoNodo == nullptr) {
+        std::cout << "Error: No se encontro ningun contacto con el criterio '" << criterio << "'." << std::endl;
+        return;
+    }
+
+    // Verificar si el contacto ya ha sido transferido
+    if (contactoNodo->data->transferido) {
+        std::cout << "Error: Este contacto ya ha sido transferido." << std::endl;
+        return;
+    }
+
+    // Mostrar usuarios disponibles
+    std::cout << "\n=== Usuarios disponibles para recibir el contacto ===" << std::endl;
+    for (int i = 0; i < totalUsuarios; ++i) {
+        if (usuarios[i] != this) { // Excluir el usuario actual
+            std::cout << "- " << usuarios[i]->getNombre() << " " << usuarios[i]->getApellido1() << std::endl;
+        }
+    }
+
+    // Seleccionar destinatario por nombre completo
+    std::string nombreDestinatario;
+    std::cout << "\nIngresa el nombre completo del usuario destinatario (ejemplo: Juan Perez): ";
+    std::cin >> std::ws;
+    std::getline(std::cin, nombreDestinatario);
+
+    Usuario* destinatario = nullptr;
+    for (int i = 0; i < totalUsuarios; ++i) {
+        std::string nombreCompleto = usuarios[i]->getNombre() + " " + usuarios[i]->getApellido1();
+        if (nombreCompleto == nombreDestinatario && usuarios[i] != this) {
+            destinatario = usuarios[i];
+            break;
+        }
+    }
+
+    if (destinatario == nullptr) {
+        std::cout << "Error: No se encontro ningun usuario con el nombre '" << nombreDestinatario << "'." << std::endl;
+        return;
+    }
+
+    // Verificar duplicados en el destinatario
+    if (destinatario->getContactos().search_by_phone(contactoNodo->data->phoneNumber) != nullptr) {
+        std::cout << "Error: El contacto ya existe en la lista de " << destinatario->getNombre() << "." << std::endl;
+        return;
+    }
+
+    // Transferir el contacto
+    Contact* contactoTransferido = new Contact(*contactoNodo->data); // Crear una copia
+    destinatario->getContactos().insert_tail(contactoTransferido);
+    contactoNodo->data->transferido = true; // Marcar como transferido
+
+    std::cout << "El contacto ha sido transferido exitosamente a " << destinatario->getNombre() << "." << std::endl;
+}
 
 
 };

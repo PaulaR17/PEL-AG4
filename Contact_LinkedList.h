@@ -11,15 +11,23 @@ public:
     std::string lastName2;
     std::string phoneNumber;
     std::string email;
+    bool transferido; // Campo nuevo para marcar contactos transferidos
 
-    Contact(std::string firstName, std::string lastName1, std::string lastName2, std::string phoneNumber, std::string email)
-        : firstName(firstName), lastName1(lastName1), lastName2(lastName2), phoneNumber(phoneNumber), email(email) {}
+    Contact(std::string firstName, std::string lastName1, std::string lastName2,
+            std::string phoneNumber, std::string email)
+        : firstName(firstName), lastName1(lastName1), lastName2(lastName2),
+          phoneNumber(phoneNumber), email(email), transferido(false) {}
 
     void print() const {
         std::cout << "Nombre: " << firstName << " " << lastName1 << " " << lastName2
-                  << ", Telefono: " << phoneNumber << ", Email: " << email << std::endl;
+                  << ", Telefono: " << phoneNumber << ", Email: " << email;
+        if (transferido) {
+            std::cout << " (Transferido)";
+        }
+        std::cout << std::endl;
     }
 };
+
 
 class Node {
 public:
@@ -136,7 +144,6 @@ public:
             }
             current = current->next;
         }
-        std::cout << "No se encontro el numero de telefono:" << phoneNumber << std::endl;
         return nullptr;
     }
 
@@ -217,7 +224,19 @@ public:
         size--;
         return true;
     }
-
+    Node* search_by_name(const std::string& name) {
+        Node* current = first;
+        while (current != nullptr) {
+            std::string fullName = current->data->firstName + " " +
+                                   current->data->lastName1 + " " +
+                                   current->data->lastName2;
+            if (fullName == name || current->data->firstName == name) {
+                return current;
+            }
+            current = current->next;
+        }
+        return nullptr;
+    }
 };
 
 #endif
